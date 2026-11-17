@@ -55,23 +55,17 @@ function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
 
-// Phone held in the hand, tilted side to side (roll = rotationY).
-// The resting angle is learned from how you hold the phone, so it works even if
-// "flat" doesn't read 0°. Each tilt of more than 20° away from rest plays one bubble.
-let restY = null;    // learned resting angle
-let tilted = false;
+// Phone lying flat in the hand, tilted side to side (roll = rotationY).
+// Each time it tips past 20° to either side, one bubble plays.
+let tiltSide = 0;   // -1 = tilted left, 0 = flat, 1 = tilted right
 
 function rotationChange(rotx, roty, rotz) {
-    if (restY === null) restY = roty;
-    const diff = roty - restY;
-    if (!tilted && Math.abs(diff) > 20) {
-        tilted = true;
+    const side = roty > 20 ? 1 : roty < -20 ? -1 : 0;
+    if (side !== 0 && side !== tiltSide) {
         playAudio();
-    } else if (tilted && Math.abs(diff) < 10) {   // back near rest: ready for the next tilt
-        tilted = false;
     }
-    if (!tilted) {
-        restY += (roty - restY) * 0.02;          // slowly follow the resting angle
+    if (side !== 0 || Math.abs(roty) < 10) {   // only reset when back near flat
+        tiltSide = side;
     }
 }
 

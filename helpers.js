@@ -42,19 +42,8 @@ function setMotionListeners() {
         alert('Motion sensors permission denied.');
       });
   }
-  // rotationX/Y/Z come from orientation events, which iOS gates with a separate permission
-  if (typeof DeviceOrientationEvent !== 'undefined' &&
-      typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission()
-      .then(state => console.log("Orientation permission: " + state))
-      .catch(error => console.log("Error getting orientation permission: %O", error));
-  }
 }
 
 //==========================================================================================
 
-// On iPhone, play web audio even when the silent switch is on (Safari 16.4+)
-if (navigator.audioSession) {
-  navigator.audioSession.type = 'playback';
-}
 const audioContext = new AudioContext();

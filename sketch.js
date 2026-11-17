@@ -35,8 +35,7 @@ function contextAudioStart() {
   if (!dspNode) {
     return;
   }
-  // iOS can also report 'interrupted', so start whenever it isn't running
-  if (audioContext.state !== 'running') {
+  if (audioContext.state === 'suspended') {
     audioContext.resume();
     // startDsp();
     buttons[0].html('Turn Off DSP');
