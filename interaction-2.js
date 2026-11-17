@@ -55,7 +55,18 @@ function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
 
+// Phone lying flat in the hand, tilted side to side (roll = rotationY).
+// Each time it tips past 20° to either side, one bubble plays.
+let tiltSide = 0;   // -1 = tilted left, 0 = flat, 1 = tilted right
+
 function rotationChange(rotx, roty, rotz) {
+    const side = roty > 20 ? 1 : roty < -20 ? -1 : 0;
+    if (side !== 0 && side !== tiltSide) {
+        playAudio();
+    }
+    if (side !== 0 || Math.abs(roty) < 10) {   // only reset when back near flat
+        tiltSide = side;
+    }
 }
 
 function mousePressed(event) {
