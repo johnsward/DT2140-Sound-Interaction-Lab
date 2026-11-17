@@ -102,6 +102,8 @@ function playAudio() {
     if (audioContext.state === 'suspended') {
         return;
     }
+    dspName.setParamValue("/drop/Freeverb/Wet")
+    dspNode.setParamValue("/drop/freq/0x00")
     dspNode.setParamValue("/drop/drop", 1)
     setTimeout(() => { dspNode.setParamValue("/drop/drop", 0) }, 100);
 }
