@@ -52,20 +52,20 @@ drop.createDSP(audioContext, 1024)
 //==========================================================================================
 
 function accelerationChange(accx, accy, accz) {
-    // playAudio()
+    // playAudio()   // runs every frame, would block the tilt trigger
 }
 
-// Phone lying flat in the hand, tilted side to side (roll = rotationY).
-// Each time it tips past 20° to either side, one bubble plays.
-let tiltSide = 0;   // -1 = tilted left, 0 = flat, 1 = tilted right
+let tilted = false;
 
 function rotationChange(rotx, roty, rotz) {
-    const side = roty > 20 ? 1 : roty < -20 ? -1 : 0;
-    if (side !== 0 && side !== tiltSide) {
+    if (!dspNode) return;                   
+    if (Math.abs(roty) > 20 && !tilted) {   
+        tilted = true;
+        dspNode.setParamValue("/drop/freq/0x00", map(Math.abs(roty), 20, 90, 400, 1500));  // more tilt = higher bubble
         playAudio();
     }
-    if (side !== 0 || Math.abs(roty) < 10) {   // only reset when back near flat
-        tiltSide = side;
+    if (Math.abs(roty) < 20) {
+        tilted = false;
     }
 }
 

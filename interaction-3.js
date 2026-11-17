@@ -57,7 +57,7 @@ function accelerationChange(accx, accy, accz) {
 
 function rotationChange(rotx, roty, rotz) {
     let tilted = false;
-    
+
     if (rotx > 45 && !tilted) {    // just tipped past 45°
         tilted = true;
         playAudio();
