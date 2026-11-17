@@ -51,12 +51,9 @@ brass.createDSP(audioContext, 1024)
 //
 //==========================================================================================
 
-let pressure = 0;
-
 function accelerationChange(accx, accy, accz) {
-    const movement = abs(accx - pAccelerationX) + abs(accy - pAccelerationY) + abs(accz - pAccelerationZ);
-    const target = constrain(map(movement, 1, 10, 0, 1), 0, 1);
-    pressure = pressure * 0.9 + target * 0.1;
+    let movement = abs(accx - pAccelerationX);     // how much phone moved since last frame
+    let pressure = constrain(movement / 10, 0, 1); // more movement = more pressure = louder (max 1)
     playAudio(pressure);
 }
 
