@@ -51,19 +51,17 @@ brass.createDSP(audioContext, 1024)
 //
 //==========================================================================================
 
+let pressure = 0;
+
 function accelerationChange(accx, accy, accz) {
-    playAudio()
+    const movement = abs(accx - pAccelerationX) + abs(accy - pAccelerationY) + abs(accz - pAccelerationZ);
+    const target = constrain(map(movement, 1, 10, 0, 1), 0, 1);
+    pressure = pressure * 0.9 + target * 0.1;
+    playAudio(pressure);
 }
 
 function rotationChange(rotx, roty, rotz) {
-    let tilted = false;
 
-    if (rotx > 45 && !tilted) {    // just tipped past 45°
-        tilted = true;
-        playAudio();
-    } else if (rotx < 30) {        // back to (almost) flat, ready again
-        tilted = false;
-    }
 }
 
 function mousePressed() {
@@ -110,7 +108,9 @@ function playAudio(pressure) {
     if (audioContext.state === 'suspended') {
         return;
     }
-    console.log(pressure)
+    if (typeof pressure !== 'number') {
+        return;   // playAudio() without a value (rotationChange, deviceShaken) would send NaN and silence the brass
+    }
     dspNode.setParamValue("/brass/blower/pressure", pressure)
 }
 

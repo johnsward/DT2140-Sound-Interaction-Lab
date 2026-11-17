@@ -58,10 +58,11 @@ function accelerationChange(accx, accy, accz) {
 let tilted = false;
 
 function rotationChange(rotx, roty, rotz) {
-    if (!dspNode) return;                   
+    if (!dspNode) return;   
+                    
     if (Math.abs(roty) > 20 && !tilted) {   
         tilted = true;
-        dspNode.setParamValue("/drop/freq/0x00", map(Math.abs(roty), 20, 90, 400, 1500));  // more tilt = higher bubble
+        dspNode.setParamValue("/drop/freq/0x00", map(Math.abs(roty), 20, 90, 400, 1500));
         playAudio();
     }
     if (Math.abs(roty) < 20) {
